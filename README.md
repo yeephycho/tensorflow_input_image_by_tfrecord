@@ -7,6 +7,9 @@ python conv_mnist_inference.py
 To run the prediction
 
 Just a reminder to myself
+
 git add .
+
 git commint -m "Say whatever you want"
+
 git push https://github.com/yeephycho/tensorflow_digit_inference master
