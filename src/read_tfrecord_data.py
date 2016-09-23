@@ -14,11 +14,9 @@ def _int64_feature(value):
     value = [value]
   return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
 
-
 def _bytes_feature(value):
   """Wrapper for inserting bytes features into Example proto."""
   return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
-  
   
 def read_and_decode(filename_queue):
     reader = tf.TFRecordReader()
@@ -36,38 +34,42 @@ def read_and_decode(filename_queue):
     label = tf.cast(features["image/class/label"], tf.int32)
     height = features["image/height"]
     filename = features["image/filename"]
-
-    return image, label, filename
+    
+    return image, label
 
 filename_queue = tf.train.string_input_producer(
         tfrecord_auto_traversal(),
-#        ["train-00-of-04.tfrecord", "train-01-of-04.tfrecord","train-02-of-04.tfrecord","train-03-of-04.tfrecord"],
         shuffle = True)
 
-image, label, filename = read_and_decode(filename_queue)
+cur_image, cur_label = read_and_decode(filename_queue)
 
-tfImage = tf.Variable(tf.zeros([128*128*3]), dtype = tf.float32)
-tfImage = image
 with tf.Session() as sess:
     sess.run(tf.initialize_all_variables())
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
     print("Write cropped and resized image to the folder './resized_image'") 
-    for i in range(200): # number of examples in your tfrecord
-        re_image = sess.run(tfImage)
-        img = Image.fromarray(re_image, "RGB")
+    j = k = l = 0
+    for i in range(300): # number of examples in your tfrecord
+        pre_image, pre_label = sess.run([cur_image, cur_label])
+        img = Image.fromarray(pre_image, "RGB")
         if not os.path.isdir("./resized_image/"):
             os.mkdir("./resized_image")
-        img.save(os.path.join("./resized_image/"+str(i)+".jpeg"))
+        if pre_label == 1:
+            img.save(os.path.join("./resized_image/steak"+str(j)+".jpeg"))
+            j += 1
+        elif pre_label == 2:
+            img.save(os.path.join("./resized_image/sushi"+str(k)+".jpeg"))
+            k += 1
+        else:
+            img.save(os.path.join("./resized_image/waffles"+str(l)+".jpeg"))
+            l += 1
         if i % 10 == 0:
-            print i
-#        print sess.run(label)
-        #print sess.run(features)
+            print ("%d images in has finished!" % i)
     print("Write finished!")
     coord.request_stop()
     coord.join(threads)
     sess.close()
-print("Go to current directory, the folder resized_image should contains 200 images with 299x299 size.")
+print("Go to current directory, the folder resized_image should contains 300 images with 299x299 size.")
 
 """
 images, sparse_labels = tf.train.shuffle_batch(
