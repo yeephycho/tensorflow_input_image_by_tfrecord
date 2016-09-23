@@ -1,10 +1,14 @@
 This is a demo project for convolutional neural network of tensorflow.
 
-Key word: tensorflow, input image, input label, input tfrecord
+Key word: [tensorflow](https://www.tensorflow.org/), input image, input label, input tfrecord
 
-It contains a tutorial script for you to easily manipulate on your own image data set, and a pretrained digit mnist recognition.
+This repo. contains tutorial scripts for you to easily manipulate on your own image data set, and a pretrained mnist model for digit recognition.
 
-Training dataset is MNIST dataset
+Many details take the official documents and tutorials as examples. But the interface is much more easier.
+
+Prefered tensorflow version is 0.10, older version may have some problems.
+
+The containing data set is [food101](http://food101atl.com/) dataset.
 
 To run the prediction:
 Modify conv_mnist_inference.py file to change the image path and pre-trained model path according to your own environment.
