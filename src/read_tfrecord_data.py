@@ -38,7 +38,7 @@ def read_and_decode(filename_queue):
     return image, label, filename
 
 filename_queue = tf.train.string_input_producer(
-        ["./train-00000-of-00004", "./train-00001-of-00004","./train-00002-of-00004","./train-00003-of-00004"],
+        ["train-00-of-04.tfrecord", "train-01-of-04.tfrecord","train-02-of-04.tfrecord","train-03-of-04.tfrecord"],
         shuffle = True)
 
 image, label, filename = read_and_decode(filename_queue)
@@ -50,18 +50,19 @@ with tf.Session() as sess:
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
     print "from the train set:"
-    for i in range(2000): # number of examples in your tfrecord
-        print sess.run(filename)
+    for i in range(200): # number of examples in your tfrecord
         re_image = sess.run(tfImage)
         img = Image.fromarray(re_image, "RGB")
-        img.save(os.path.join("./re_steak/"+str(i)+".jpeg"))
+        if not os.path.isdir("./resized_image/"):
+            os.mkdir("./resized_image")
+        img.save(os.path.join("./resized_image/"+str(i)+".jpeg"))
         print i
 #        print sess.run(label)
         #print sess.run(features)
     coord.request_stop()
     coord.join(threads)
     sess.close()
-print("Line~~~~~~~~~~~~~~~~~~~~~~~~~~")
+print("Go to current directory, the folder resized_image should contains 200 images with 299x299 size.")
 
 """
 images, sparse_labels = tf.train.shuffle_batch(
