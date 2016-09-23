@@ -8,7 +8,7 @@ Many details take the official documents and tutorials as examples. But the inte
 
 Prefered tensorflow version is 0.10, older version may have some problems.
 
-The containing data set is [food101](http://food101atl.com/) dataset.
+The containing image data is a subset of [food101](https://www.vision.ee.ethz.ch/datasets_extra/food-101/) dataset.
 
 To run the prediction:
 Modify conv_mnist_inference.py file to change the image path and pre-trained model path according to your own environment.
