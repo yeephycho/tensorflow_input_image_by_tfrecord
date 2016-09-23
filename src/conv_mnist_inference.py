@@ -6,11 +6,11 @@ from PIL import Image
 # mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
 # pre-process data if necessary
-img = Image.open("/home/yeephycho/Desktop/num4_1.jpg")
+img = Image.open("../num4_1.jpg")
 print("Orignial image size is: ")
 print(img.size)
 img = img.resize((28, 28), PIL.Image.ANTIALIAS)
-img.save("/home/yeephycho/Desktop/num4.jpg")
+img.save("../num4.jpg")
 print("Resized image size is: ")
 print(img.size)
 
@@ -66,7 +66,7 @@ b_fc2 = bias_variable([10])
 y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
 # Your own data
-img = misc.imread("/home/yeephycho/Desktop/num4.jpg")
+img = misc.imread("../num4.jpg")
 img.shape=(1, 784)
 
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y_conv), reduction_indices=[1]))
@@ -76,7 +76,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 sess.run(tf.initialize_all_variables())
 
 saver = tf.train.Saver()
-saver.restore(sess, "/home/yeephycho/Desktop/tf_input_jpg/tfImgCnnMnist/model_simple.ckpt")
+saver.restore(sess, "../model_simple.ckpt")
 print("model restored.")
 
 result = sess.run(y_conv, feed_dict={x: img, keep_prob: 1.0})
