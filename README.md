@@ -1,6 +1,7 @@
 This is a demo project for convolutional neural network of tensorflow.
 
 Key word: [tensorflow](https://www.tensorflow.org/), input image, input label, input tfrecord
+
 More details can be found in post [here](http://yeephycho.github.io/2016/08/15/image-data-in-tensorflow/).
 
 This repo. contains tutorial scripts for you to easily manipulate on your own image data set, and a pretrained mnist model for digit recognition.
