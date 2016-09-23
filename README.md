@@ -1,12 +1,15 @@
 This is a demo project for convolutional neural network of tensorflow.
+
 Key word: tensorflow, input image, input label, input tfrecord
+
 It contains a tutorial script for you to easily manipulate on your own image data set, and a pretrained digit mnist recognition.
+
 Training dataset is MNIST dataset
+To run the prediction:
 Modify conv_mnist_inference.py file to change the image path and pre-trained model path according to your own environment.
 ``` bash
 python conv_mnist_inference.py 
 ```
-To run the prediction
 
 The tensorflow I/O script is as follows:
 The script serves as a tutorial to automatically turn your own image data set to tfrecord, then read the tfrecord to do the image preprocessing, you can easily modify this program to fit your own program such as training your own CNN.
