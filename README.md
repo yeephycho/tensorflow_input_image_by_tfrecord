@@ -1,4 +1,5 @@
-This is a demo project for convolutional neural network of tensorflow
+This is a demo project for convolutional neural network of tensorflow.
+Key word: tensorflow, input image, input label, input tfrecord
 It contains a tutorial script for you to easily manipulate on your own image data set, and a pretrained digit mnist recognition.
 Training dataset is MNIST dataset
 Modify conv_mnist_inference.py file to change the image path and pre-trained model path according to your own environment.
