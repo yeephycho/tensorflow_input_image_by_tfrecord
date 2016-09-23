@@ -19,6 +19,11 @@ def _bytes_feature(value):
   """Wrapper for inserting bytes features into Example proto."""
   return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
   
+class image_object:
+    def __init__(self):
+        self.image = tf.Variable("0",dtype=tf.string)
+        self.label = tf.Variable(0, dtype=tf.int32)
+        self.filename = tf.Variable("0",dtype = tf.string)
   
 def read_and_decode(filename_queue):
     reader = tf.TFRecordReader()
@@ -36,31 +41,38 @@ def read_and_decode(filename_queue):
     label = tf.cast(features["image/class/label"], tf.int32)
     height = features["image/height"]
     filename = features["image/filename"]
+    
+    current_image = image_object()
+    current_image.image = image
+    current_image.label = label
+    current_image.filename = filename
 
-    return image, label, filename
+    return current_image.toString()
 
 filename_queue = tf.train.string_input_producer(
         tfrecord_auto_traversal(),
 #        ["train-00-of-04.tfrecord", "train-01-of-04.tfrecord","train-02-of-04.tfrecord","train-03-of-04.tfrecord"],
         shuffle = True)
 
-image, label, filename = read_and_decode(filename_queue)
+#image, label, filename = read_and_decode(filename_queue)
+cur_image = image_object()
+cur_image = read_and_decode(filename_queue)
 
-tfImage = tf.Variable(tf.zeros([128*128*3]), dtype = tf.float32)
-tfImage = image
+
+
 with tf.Session() as sess:
     sess.run(tf.initialize_all_variables())
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
     print("Write cropped and resized image to the folder './resized_image'") 
     for i in range(200): # number of examples in your tfrecord
-        re_image = sess.run(tfImage)
-        img = Image.fromarray(re_image, "RGB")
+        re_image = sess.run(cur_image)
+        img = Image.fromarray(re_image[i], "RGB")
         if not os.path.isdir("./resized_image/"):
             os.mkdir("./resized_image")
         img.save(os.path.join("./resized_image/"+str(i)+".jpeg"))
         if i % 10 == 0:
-            print i
+            print ("%d images in has finished!" % i)
 #        print sess.run(label)
         #print sess.run(features)
     print("Write finished!")
