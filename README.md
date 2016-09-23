@@ -32,4 +32,4 @@ git add .
 
 git commint -m "Say whatever you want"
 
-git push https://github.com/yeephycho/tensorflow_digit_inference master
+git push https://github.com/yeephycho/tensorflow_input_image_by_tfrecord master
