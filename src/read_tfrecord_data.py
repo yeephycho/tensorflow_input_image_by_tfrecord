@@ -55,6 +55,16 @@ def read_and_decode(filename_queue):
     return current_image_object
 
 
+def generate_mini_batch(image, label, batch_size = 50):
+	images, labels = tf.train.shuffle_batch(
+		[image, label],
+		batch_size = batch_size,
+		capacity = min_queue_examples + 3 * batch_size,
+		min_after_dequeue = min_queue_examples
+	)
+	return images, labels
+
+
 filename_queue = tf.train.string_input_producer(
         tfrecord_auto_traversal(),
         shuffle = True)
