@@ -17,6 +17,7 @@ Prefered tensorflow version is 0.10, older version may have some problems.
 
 ## Dataset
 The test image for image input is a subset of [food101](https://www.vision.ee.ethz.ch/datasets_extra/food-101/) dataset.
+
 The CNN dataset is MNIST dataset.
 
 ## Usage
