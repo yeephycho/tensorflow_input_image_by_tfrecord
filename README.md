@@ -24,17 +24,19 @@ The CNN dataset is MNIST dataset.
 The procedure of using tensorflow I/O script is as follows:
 The script serves as a tutorial to automatically turn your own image data set to tfrecord, then read the tfrecord to do the image preprocessing, you can easily modify this program to fit your own project to train your own CNN.
 ``` bash
-cd src
+cd ../tensorflow_input_image_by_tfrecord/src
 python build_image_data.py
 # This operation will search the folders named after the labels in label.txt file, then turn all the files in the labeled folders to .tfrecord file. Check the label.txt file to learn more.
-python read_tfrecord_data.py
+python read_tfrecord_data.py --image_number=300 --class_number=3 --image_height=299 --image_width=299
+# The above arguments are default.
 # This operation will read the generated .tfrecord file into tensors/images, and write the image to the resized_image folder, the default image size is 299x299. You also can pass arguments: image_number, class_number, image_height, image_width.
 ```
 
 To run the MNIST prediction:
 Modify conv_mnist_inference.py file to change the image path and pre-trained model path according to your own environment.
 ``` bash
-python conv_mnist_inference.py 
+python conv_mnist_inference.py --image_path $PATH_TO_YOUR_DIGIT_IMAGE 
+# e.g. python conv_mnist_inference.py --image_path=../num2.jpg
 ```
 
 Command below is just a reminder to myself

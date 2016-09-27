@@ -3,14 +3,22 @@ from scipy import misc
 import PIL
 from PIL import Image
 
+import tensorflow as tf
+
 # mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
 # pre-process data if necessary
-img = Image.open("../num4_1.jpg")
+
+flags = tf.app.flags
+FLAGS = flags.FLAGS
+flags.DEFINE_string("image_path", "../num4_1.jpg", "Path to your input digit image.")
+
+
+img = Image.open(FLAGS.image_path)
 print("Orignial image size is: ")
 print(img.size)
 img = img.resize((28, 28), PIL.Image.ANTIALIAS)
-img.save("../num4.jpg")
+img.save("../tmp_image.jpg")
 print("Resized image size is: ")
 print(img.size)
 
@@ -66,7 +74,7 @@ b_fc2 = bias_variable([10])
 y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
 # Your own data
-img = misc.imread("../num4.jpg")
+img = misc.imread("../tmp_image.jpg")
 img.shape=(1, 784)
 
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y_conv), reduction_indices=[1]))
