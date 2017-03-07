@@ -75,20 +75,21 @@ import threading
 
 import numpy as np
 import tensorflow as tf
+from PIL import Image
 
 tf.app.flags.DEFINE_string('train_directory', './',
                            'Training data directory')
-tf.app.flags.DEFINE_string('validation_directory', './',
+tf.app.flags.DEFINE_string('validation_directory', '',
                            'Validation data directory')
 tf.app.flags.DEFINE_string('output_directory', './',
                            'Output data directory')
 
-tf.app.flags.DEFINE_integer('train_shards', 2,
+tf.app.flags.DEFINE_integer('train_shards', 4,
                             'Number of shards in training TFRecord files.')
 tf.app.flags.DEFINE_integer('validation_shards', 0,
                             'Number of shards in validation TFRecord files.')
 
-tf.app.flags.DEFINE_integer('num_threads', 2,
+tf.app.flags.DEFINE_integer('num_threads', 4,
                             'Number of threads to preprocess the images.')
 
 # The labels file contains a list of valid labels are held in this file.
@@ -103,6 +104,7 @@ tf.app.flags.DEFINE_string('labels_file', './label.txt', 'Labels file')
 
 FLAGS = tf.app.flags.FLAGS
 
+i = 0
 
 def _int64_feature(value):
   """Wrapper for inserting int64 features into Example proto."""
@@ -134,16 +136,17 @@ def _convert_to_example(filename, image_buffer, label, text, height, width):
   channels = 3
   image_format = 'JPEG'
 
+
   example = tf.train.Example(features=tf.train.Features(feature={
       'image/height': _int64_feature(height),
       'image/width': _int64_feature(width),
-      'image/colorspace': _bytes_feature(tf.compat.as_bytes(colorspace)),
+      'image/colorspace': _bytes_feature(colorspace),
       'image/channels': _int64_feature(channels),
       'image/class/label': _int64_feature(label),
-      'image/class/text': _bytes_feature(tf.compat.as_bytes(text)),
-      'image/format': _bytes_feature(tf.compat.as_bytes(image_format)),
-      'image/filename': _bytes_feature(tf.compat.as_bytes(os.path.basename(filename))),
-      'image/encoded': _bytes_feature(tf.compat.as_bytes(image_buffer))}))
+      'image/class/text': _bytes_feature(text),
+      'image/format': _bytes_feature(image_format),
+      'image/filename': _bytes_feature(os.path.basename(filename)),
+      'image/encoded': _bytes_feature(image_buffer)}))
   return example
 
 
@@ -199,8 +202,7 @@ def _process_image(filename, coder):
     width: integer, image width in pixels.
   """
   # Read the image file.
-  with tf.gfile.FastGFile(filename, 'r') as f:
-    image_data = f.read()
+  image_data = tf.gfile.FastGFile(filename, 'r').read()
 
   # Convert any PNG to JPEG's for consistency.
   if _is_png(filename):
@@ -209,12 +211,21 @@ def _process_image(filename, coder):
 
   # Decode the RGB JPEG.
   image = coder.decode_jpeg(image_data)
+  print(tf.Session().run(tf.shape(image)))
+
+#  image = tf.Session().run(tf.image.resize_image_with_crop_or_pad(image, 128, 128))
+#  image_data = tf.image.encode_jpeg(image)
+#  img = Image.fromarray(image, "RGB")
+#  img.save(os.path.join("./re_steak/"+str(i)+".jpeg"))
+#  i = i+1
+
 
   # Check that image converted to RGB
   assert len(image.shape) == 3
   height = image.shape[0]
   width = image.shape[1]
   assert image.shape[2] == 3
+
 
   return image_data, height, width
 
@@ -247,10 +258,10 @@ def _process_image_files_batch(coder, thread_index, ranges, name, filenames,
   num_files_in_thread = ranges[thread_index][1] - ranges[thread_index][0]
 
   counter = 0
-  for s in range(num_shards_per_batch):
+  for s in xrange(num_shards_per_batch):
     # Generate a sharded version of the file name, e.g. 'train-00002-of-00010'
     shard = thread_index * num_shards_per_batch + s
-    output_filename = '%s-%.5d-of-%.5d' % (name, shard, num_shards)
+    output_filename = '%s-%.2d-of-%.2d.tfrecord' % (name, shard, num_shards)
     output_file = os.path.join(FLAGS.output_directory, output_filename)
     writer = tf.python_io.TFRecordWriter(output_file)
 
@@ -268,13 +279,13 @@ def _process_image_files_batch(coder, thread_index, ranges, name, filenames,
       writer.write(example.SerializeToString())
       shard_counter += 1
       counter += 1
+      print(counter)
 
       if not counter % 1000:
         print('%s [thread %d]: Processed %d of %d images in thread batch.' %
               (datetime.now(), thread_index, counter, num_files_in_thread))
         sys.stdout.flush()
 
-    writer.close()
     print('%s [thread %d]: Wrote %d images to %s' %
           (datetime.now(), thread_index, shard_counter, output_file))
     sys.stdout.flush()
@@ -300,7 +311,8 @@ def _process_image_files(name, filenames, texts, labels, num_shards):
   # Break all images into batches with a [ranges[i][0], ranges[i][1]].
   spacing = np.linspace(0, len(filenames), FLAGS.num_threads + 1).astype(np.int)
   ranges = []
-  for i in range(len(spacing) - 1):
+  threads = []
+  for i in xrange(len(spacing) - 1):
     ranges.append([spacing[i], spacing[i+1]])
 
   # Launch a thread for each batch.
@@ -314,7 +326,7 @@ def _process_image_files(name, filenames, texts, labels, num_shards):
   coder = ImageCoder()
 
   threads = []
-  for thread_index in range(len(ranges)):
+  for thread_index in xrange(len(ranges)):
     args = (coder, thread_index, ranges, name, filenames,
             texts, labels, num_shards)
     t = threading.Thread(target=_process_image_files_batch, args=args)
@@ -386,7 +398,7 @@ def _find_image_files(data_dir, labels_file):
   # Shuffle the ordering of all image files in order to guarantee
   # random ordering of the images with respect to label in the
   # saved TFRecord files. Make the randomization repeatable.
-  shuffled_index = list(range(len(filenames)))
+  shuffled_index = range(len(filenames))
   random.seed(12345)
   random.shuffle(shuffled_index)
 
@@ -418,7 +430,7 @@ def main(unused_argv):
   assert not FLAGS.validation_shards % FLAGS.num_threads, (
       'Please make the FLAGS.num_threads commensurate with '
       'FLAGS.validation_shards')
-  print('Saving results to %s' % FLAGS.output_directory)
+  print('Saving results to %s !' % FLAGS.output_directory)
 
   # Run it!
   _process_dataset('validation', FLAGS.validation_directory,
