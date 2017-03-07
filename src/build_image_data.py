@@ -135,7 +135,7 @@ def _convert_to_example(filename, image_buffer, label, text, height, width):
   colorspace = 'RGB'
   channels = 3
   image_format = 'JPEG'
-  
+
 
   example = tf.train.Example(features=tf.train.Features(feature={
       'image/height': _int64_feature(height),
@@ -212,20 +212,20 @@ def _process_image(filename, coder):
   # Decode the RGB JPEG.
   image = coder.decode_jpeg(image_data)
   print(tf.Session().run(tf.shape(image)))
-  
+
 #  image = tf.Session().run(tf.image.resize_image_with_crop_or_pad(image, 128, 128))
 #  image_data = tf.image.encode_jpeg(image)
 #  img = Image.fromarray(image, "RGB")
 #  img.save(os.path.join("./re_steak/"+str(i)+".jpeg"))
 #  i = i+1
-  
+
 
   # Check that image converted to RGB
   assert len(image.shape) == 3
   height = image.shape[0]
   width = image.shape[1]
   assert image.shape[2] == 3
-  
+
 
   return image_data, height, width
 
