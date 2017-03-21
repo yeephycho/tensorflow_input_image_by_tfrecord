@@ -44,7 +44,7 @@ python conv_mnist_inference.py --image_path $PATH_TO_YOUR_DIGIT_IMAGE
 ```
 
 To train with flower dataset:
-First you need to download the flower dataset from the script [here]((https://github.com/tensorflow/models/tree/master/inception/inception)).
+First you need to download the flower dataset from the script [here](https://github.com/tensorflow/models/tree/master/inception/inception).
 After unpack the dataset, split the dataset as training set and test set and generate tfrecords according to my previous description.
 I believe you need to modify the I/O path and checkpoint settings in the script.
 Read the source code, it will lead to how to train and evaluate the network. I used the batch size of 5 images and each image in the training set was trained more than 200 times.
