@@ -8,7 +8,9 @@ Key word: [tensorflow](https://www.tensorflow.org/), input image, input label, i
 
 More details can be found [here](http://yeephycho.github.io/2016/08/15/image-data-in-tensorflow/).
 
-This repo. contains two demo program, first one is a tutorial by using three python scripts to help you to manipulate on your own image dataset. The second one is a pretrained mnist model for digit recognition, you can feed your own image to the network to see the prediction result.
+This repo. contains three demo program, first one is a tutorial by using three python scripts to help you to manipulate on your own image dataset. The second one is a pretrained mnist model for digit recognition, you can feed your own image to the network to see the prediction result. The thrid demo is a deep neural network script with the tfrecord input, training and evaluation function are all added within the script, if you want to feed your own data to train a cnn I believe it's
+an very good example, the script is under the src folder named flower_train_cnn.py, I trained this network from scratch, I build the very typical network structure by myself, the input comes from tensorflow imagenet finetuning project, there's five kinds of flowers. I use 290 images as test set and the rest of the images are training set, the final traning accuracy is above 97 percent and the evaluation accuracy is above 83 percent. I will document the project when
+I have time, but I think if you cannot understand my source code, it may not be a very good time for you to start with tensorflow, the official tutorial mnist and cifar10 source code are all execllent tutorials.
 
 The scrips take the official documents and tutorials as examples. The difference is that the interface is more friendly. Official tutorial only teach you how to import mnist, cifar10 or imagenet dataset, this project can help you feed your own dataset to your network.
 
