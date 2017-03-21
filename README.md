@@ -8,14 +8,16 @@ Key word: [tensorflow](https://www.tensorflow.org/), input image, input label, i
 
 More details can be found [here](http://yeephycho.github.io/2016/08/15/image-data-in-tensorflow/).
 
-This repo. contains three demo program, first one is a tutorial by using three python scripts to help you to manipulate on your own image dataset. The second one is a pretrained mnist model for digit recognition, you can feed your own image to the network to see the prediction result. The thrid demo is a deep neural network script with the tfrecord input, training and evaluation function are all added within the script, if you want to feed your own data to train a cnn I believe it's
-an very good example, the script is under the src folder named flower_train_cnn.py, I trained this network from scratch, I build the very typical network structure by myself, the input comes from tensorflow imagenet finetuning project, there's five kinds of flowers. I use 290 images as test set and the rest of the images are training set, the final traning accuracy is above 97 percent and the evaluation accuracy is above 83 percent. I will document the project when
-I have time, but I think if you cannot understand my source code, it may not be a very good time for you to start with tensorflow, the official tutorial mnist and cifar10 source code are all execllent tutorials.
+This repo. contains three demo program:
+- First one is a tutorial by using three python scripts to help you to manipulate on your own image dataset. 
+- The second one is a pretrained mnist model for digit recognition, you can feed your own image to the network to see the prediction result. 
+- The thrid demo is a deep neural network with the tfrecord input script, training and evaluation functions are all added within the script, if you want to feed your own data to train a cnn I believe it's a very good example, the script is under the src folder named [flower_train_cnn.py](https://github.com/yeephycho/tensorflow_input_image_by_tfrecord/blob/master/src/flower_train_cnn.py), I trained this network from scratch, I built a very typical network by myself, the input comes from [tensorflow imagenet finetuning project](https://github.com/tensorflow/models/tree/master/inception/inception), there are five kinds of flower. I use 290 images as test set and the rest of the images are training set, final training accuracy is above 97 percent and the evaluation accuracy is above 83 percent. I will document the project when
+I have time. If you cannot understand my source code, it may not be a very good time for you to start with tensorflow here, the official tutorial [mnist](https://www.tensorflow.org/get_started/mnist/beginners) and [cifar10](https://github.com/tensorflow/tensorflow/tree/r0.7/tensorflow/models/image/cifar10) source code are all execllent tutorials.
 
 The scrips take the official documents and tutorials as examples. The difference is that the interface is more friendly. Official tutorial only teach you how to import mnist, cifar10 or imagenet dataset, this project can help you feed your own dataset to your network.
 
 ## Dependencies
-Prefered tensorflow version is 0.10, older version may have some problems.
+Prefered tensorflow version is 1.0, older version may have some problems.
 
 ## Dataset
 The test image for image input is a subset of [food101](https://www.vision.ee.ethz.ch/datasets_extra/food-101/) dataset.
@@ -40,6 +42,13 @@ Modify conv_mnist_inference.py file to change the image path and pre-trained mod
 python conv_mnist_inference.py --image_path $PATH_TO_YOUR_DIGIT_IMAGE 
 # e.g. python conv_mnist_inference.py --image_path=../num2.jpg
 ```
+
+To train with flower dataset:
+First you need to download the flower dataset from the script [here]((https://github.com/tensorflow/models/tree/master/inception/inception)).
+After unpack the dataset, split the dataset as training set and test set and generate tfrecords according to my previous description.
+I believe you need to modify the I/O path and checkpoint settings in the script.
+Read the source code, it will lead to how to train and evaluate the network. I used the batch size of 5 images and each image in the training set was trained more than 200 times.
+
 
 Command below is just a reminder to myself
 
