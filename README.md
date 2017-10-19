@@ -54,6 +54,6 @@ Command below is just a reminder to myself
 
 git add .
 
-git commint -m "Say whatever you want"
+git commit -m "Say whatever you want"
 
 git push https://github.com/yeephycho/tensorflow_input_image_by_tfrecord master
