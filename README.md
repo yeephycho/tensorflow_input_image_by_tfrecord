@@ -51,7 +51,7 @@ Read the source code, it will lead to how to train and evaluate the network. I u
 
 
 ## Advanced
-For those people who tried this example tutorial, I believe that you all equiped with certain kinds of intuition of deep convolution neural networks.
+For those people who tried this example tutorial, I believe that you are all equiped with certain kinds of intuition of deep convolution neural networks.
 
 If you wants to move on, you can refer to my other repositories, I'm quite proud of my other work such as my implementation of [densenet](https://github.com/yeephycho/densenet-tensorflow) and a customized [nasnet](https://github.com/yeephycho/nasnet-tensorflow).
 
