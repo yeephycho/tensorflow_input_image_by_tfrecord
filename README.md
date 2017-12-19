@@ -50,10 +50,13 @@ I believe you need to modify the I/O path and checkpoint settings in the script.
 Read the source code, it will lead to how to train and evaluate the network. I used the batch size of 5 images and each image in the training set was trained more than 200 times.
 
 
-Command below is just a reminder to myself
+## Advanced
+For those people who tried this example tutorial, I believe that you all equiped with certain kinds of intuition of deep convolution neural networks.
 
-git add .
+If you wants to move on, you can refer to my other repositories, I'm quite proud of my other work such as my implementation of [densenet](https://github.com/yeephycho/densenet-tensorflow) and a customized [nasnet](https://github.com/yeephycho/nasnet-tensorflow).
 
-git commit -m "Say whatever you want"
+If you want to move to object detection problem which is the most promising area of computer vision and deep learning, you can refer to my repo. [widerface-to-tfrecord](https://github.com/yeephycho/widerface-to-tfrecord) and a mobilenet based [face detector](https://github.com/yeephycho/tensorflow-face-detection).
 
-git push https://github.com/yeephycho/tensorflow_input_image_by_tfrecord master
+I do hope that my effort can be helpful and some day you can also contribute to this open source community, and for those who use my code, a star or a fork will be highly appreciated, thanks in advance!!!!!
+
+

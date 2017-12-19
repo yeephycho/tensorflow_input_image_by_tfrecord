@@ -173,6 +173,9 @@ def flower_train():
     saver = tf.train.Saver()
 
     with tf.Session() as sess:
+        # Visualize the graph through tensorboard.
+        file_writer = tf.summary.FileWriter("./logs", sess.graph)
+
         sess.run(tf.global_variables_initializer())
         saver.restore(sess, "/home/yeephycho/github/tensorflow_tutorial/tf-cnn/src/checkpoint-train.ckpt")
         coord = tf.train.Coordinator()
